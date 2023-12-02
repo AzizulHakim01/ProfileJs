@@ -34,6 +34,11 @@ const Profile = () => {
                     >
                       Resume
                     </Link>
+                    <Link to={"/edit"}
+                      className="bg-red-700 hover:bg-gray-400 text-white py-2 px-4 rounded"
+                    >
+                      Edit
+                    </Link>
                   </div>
                   <div
                     className={`text-gray-600 mt-6 ${
