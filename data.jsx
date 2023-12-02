@@ -23,8 +23,6 @@ export const userData = [{
     ],
     experience:[
         {title:"Web Developer",companyName:"ABC Company",time:"2017-2019", desc:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit."},
-        {title:"Computer Operator",companyName:"Hudai Company",time:"2019-2023", desc:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit."},
-        {title:"Web Developer",companyName:"ABC Company",time:"2017-2019", desc:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit."},
-        {title:"Computer Operator",companyName:"Hudai Company",time:"2019-2023", desc:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit."},
+        {title:"Computer Operator",companyName:"Hudai Company",time:"2019-2023", desc:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit."}
     ]
 }]
