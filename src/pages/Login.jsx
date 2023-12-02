@@ -26,7 +26,7 @@ const Login = () => {
         dispatch(login(true));
   
         // Save user information in local storage
-        const user = { email: "user@example.com", password: "password" };
+        const user = true;
         localStorage.setItem("user", JSON.stringify(user));
         message.success("Logged In");
   
