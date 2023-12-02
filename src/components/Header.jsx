@@ -17,14 +17,12 @@ const Header = () => {
     navigate("/");
   };
 
-  useEffect(() => {
-    setUser(localStorage.getItem("user"));
-  }, [user]); // You might need to use [user] here if you want to trigger the effect when the user state changes
+  
 
   return (
     <div className="bg-gradient-to-r from-teal-300 to-teal-700">
       <header className="flex justify-between w-[1152px] mx-auto h-[10vh] items-center">
-        <Link className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-pink-900 bg-clip-text text-transparent">
+        <Link to={"/"} className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-pink-900 bg-clip-text text-transparent">
           ProfileJs
         </Link>
         {user ? (

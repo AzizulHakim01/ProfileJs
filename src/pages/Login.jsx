@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../components/Layout";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,27 +10,35 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Check if the user is already logged in
+    if (user) {
+      // Redirect to the profile page
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   const handleSignIn = async (e) => {
     e.preventDefault();
-  
+
     try {
       // Check your authentication logic here
       // For simplicity, let's assume the authentication is successful
       // You might want to replace this with your actual authentication logic
-      
+
       // Simulate an asynchronous authentication process (replace with your actual logic)
       const isAuthenticated = await authenticateUser();
-  
+
       if (isAuthenticated) {
         // Dispatch the login action
         dispatch(login(true));
-  
+
         // Save user information in local storage
         const user = true;
         localStorage.setItem("user", JSON.stringify(user));
         message.success("Logged In");
-  
-        // Navigate to the profile page
+
+        // Redirect to the profile page
         navigate("/profile");
       } else {
         message.error("Login Failed");
@@ -40,7 +48,7 @@ const Login = () => {
       message.error("An error occurred during authentication");
     }
   };
-  
+
   // Replace this with your actual authentication logic (e.g., making an API call)
   const authenticateUser = async () => {
     // Simulate an asynchronous authentication process (replace with your actual logic)
@@ -53,7 +61,6 @@ const Login = () => {
     });
   };
   
-
   return (
     <Layout>
       <section className="bg-gradient-to-r from-teal-300 to-teal-700">

@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
 import Descreption from "./components/Descreption";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "./reducers/userReducer";
 
 function App() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   // Fetch user data from local storage on component mount
   useEffect(() => {
@@ -23,7 +24,7 @@ function App() {
   return (
     <Routes>
       {user ? (
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/" element={<Profile />} />
       ) : (
         <Route path="/" element={<Homepage />} />
       )}
