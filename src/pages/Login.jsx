@@ -3,18 +3,57 @@ import Layout from "../components/Layout";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/userReducer";
-
+import { message } from "antd";
 
 const Login = () => {
-    const user = useSelector(state => state.user)
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const handleSignIn = (e) =>{
-        e.preventDefault()
-        dispatch(login(true))
-        navigate("/profile")
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+  
+    try {
+      // Check your authentication logic here
+      // For simplicity, let's assume the authentication is successful
+      // You might want to replace this with your actual authentication logic
+      
+      // Simulate an asynchronous authentication process (replace with your actual logic)
+      const isAuthenticated = await authenticateUser();
+  
+      if (isAuthenticated) {
+        // Dispatch the login action
+        dispatch(login(true));
+  
+        // Save user information in local storage
+        const user = { email: "user@example.com", password: "password" };
+        localStorage.setItem("user", JSON.stringify(user));
+        message.success("Logged In");
+  
+        // Navigate to the profile page
+        navigate("/profile");
+      } else {
+        message.error("Login Failed");
+      }
+    } catch (error) {
+      console.error("Error during authentication:", error);
+      message.error("An error occurred during authentication");
     }
+  };
+  
+  // Replace this with your actual authentication logic (e.g., making an API call)
+  const authenticateUser = async () => {
+    // Simulate an asynchronous authentication process (replace with your actual logic)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // Replace the condition with your actual authentication logic
+        const isAuthenticated = true; // Simulate success
+        resolve(isAuthenticated);
+      }, 1000); // Simulate a delay
+    });
+  };
+  
+
   return (
     <Layout>
       <section className="bg-gradient-to-r from-teal-300 to-teal-700">
@@ -24,9 +63,7 @@ const Login = () => {
             className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
           >
             <img className="w-8 h-8 mr-2" src="/favicon.png" alt="logo" />
-            <Link className="text-3xl font-bold text-white">
-              ProfileJs
-            </Link>
+            <Link className="text-3xl font-bold text-white">ProfileJs</Link>
           </Link>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
