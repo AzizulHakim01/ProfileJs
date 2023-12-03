@@ -59,7 +59,6 @@ const Profile = () => {
                       return (
                         <div className="flex justify-between">
                           <li className="mb-2">{skill.name}</li>
-                          <p>{skill.level}</p>
                         </div>
                       );
                     })}

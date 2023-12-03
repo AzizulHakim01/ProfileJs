@@ -7,11 +7,11 @@ export const userData = [{
     phone:"01624704422",
     email:"azizulhakimgps@gmail.com",
     skills:[
-        {name:'HTML',level:95},
-        {name:'CSS',level:85},
-        {name:'JavaScript',level:90},
-        {name:'React',level:90},
-        {name:'Redux',level:90}
+        {name:'HTML'},
+        {name:'CSS'},
+        {name:'JavaScript'},
+        {name:'React'},
+        {name:'Redux'}
     ],
     about:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Nulla vulputate pharetra tellus, in luctus risus rhoncus id.",
     social:[
