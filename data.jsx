@@ -6,13 +6,7 @@ export const userData = [{
     resume: "/Azizul_Hakim_Resume_ca.pdf",
     phone:"01624704422",
     email:"azizulhakimgps@gmail.com",
-    skills:[
-        {name:'HTML'},
-        {name:'CSS'},
-        {name:'JavaScript'},
-        {name:'React'},
-        {name:'Redux'}
-    ],
+    skills:['HTML', 'CSS', 'JAVASCRIPT', 'REACT', 'REDUX'],
     about:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Nulla vulputate pharetra tellus, in luctus risus rhoncus id.",
     social:[
         {name:"LinkedIn", link:"https://linkedin.com"},

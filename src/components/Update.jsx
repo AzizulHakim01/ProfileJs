@@ -2,17 +2,53 @@ import React, { useState } from "react";
 import Layout from "./Layout";
 import { userData } from "../../data";
 import { useDispatch, useSelector } from "react-redux";
+import { updateUserData } from "../reducers/userDataReducer";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const Update = () => {
-  const user = useSelector((state) => state.userData)[0];
-  console.log(userData);
-  const [uName, setUname] = useState("");
-  const [uProfession, setUprofession] = useState("");
-  const [uPhone, setUphone] = useState("");
-  const [uEmail, setUemail] = useState("");
-  const [uAbout, setUabout] = useState("");
-  const [uSkills, setUskills] = useState('');
+  const navigate = useNavigate()
+  const user = useSelector((state) => state.userData.data)[0];
+  const [uName, setUname] = useState(user.name);
+  const [uProfession, setUprofession] = useState(user.profession);
+  const [uPhone, setUphone] = useState(user.phone);
+  const [uEmail, setUemail] = useState(user.email);
+  const [uAbout, setUabout] = useState(user.about);
+  const [uSkills, setUskills] = useState(user.skills.join(', '));
   const [image, setImage] = useState(null);
+  const [uResume, setUResume] = useState(null);
+
+  const initialSocialState = user.social.map((socialItem) => ({
+    name: socialItem.name,
+    link: socialItem.link,
+  }));
+
+  const [uSocial, setUSocial] = useState(initialSocialState)
+
+  const initialExperienceState = user.experience.map((experienceItem)=>({
+    title:experienceItem.title,
+    companyName:experienceItem.companyName,
+    time:experienceItem.time,
+    desc:experienceItem.desc
+  }))
+
+  const [uExperience, setUExperience] = useState(initialExperienceState)
+
+  //handle Resume Change
+  const handleResumeChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Create a Blob or File object
+      const blob = new Blob([file], { type: file.type });
+
+      // Use createObjectURL with the Blob object
+      const resumeUrl = URL.createObjectURL(blob);
+
+      // Set the resumeUrl in the state
+      setUResume(resumeUrl);
+    }
+  };
 
   //Showing and Uploading Image
   const handleImageChange = (e) => {
@@ -35,18 +71,53 @@ const Update = () => {
     setUskills(e.target.value);
   };
 
-  const handleSkillSubmit = (e) => {
-    e.preventDefault();
-    // You can process the skills as needed, e.g., store in state, send to API, etc.
-    const skillsArray = uSkills.split(',').map(skill => skill.trim());
-    console.log('Skills:', skillsArray);
+   // Handle change for uSocial
+   const handleSocialChange = (index, key, value) => {
+    const updatedSocial = [...uSocial];
+    updatedSocial[index][key] = value;
+    setUSocial(updatedSocial);
+  };
+
+  // Handle change for uExperience
+  const handleExperienceChange = (index, key, value) => {
+    const updatedExperience = [...uExperience];
+    updatedExperience[index][key] = value;
+    setUExperience(updatedExperience);
   };
 
 
   const dispatch = useDispatch();
+  const handleSubmit =  () => {
+    try {
+      // Prepare the updated data based on the user input
+    const updatedData = {
+      name: uName,
+      profession: uProfession,
+      phone: uPhone,
+      email: uEmail,
+      about: uAbout,
+      skills: uSkills.split(',').map((skill) => skill.trim()), // Assuming skills is an array
+      image: image, // Assuming image is a URL or Blob
+      resume: uResume, // Assuming uResume is a URL or Blob
+      social: uSocial, // Assuming user.social is an array of social links
+      experience: uExperience, // Assuming user.experience is an array of experience objects
+    };
+
+    // Dispatch the updateUserData action
+    dispatch(updateUserData({ id: user.id, updatedData }));
+    console.log(updatedData)
+    message.success("User Data Updated")
+    navigate("/")
+    } catch (error) {
+      console.log(error)
+    }
+    
+  };
+
+  console.log(uSkills)
   return (
     <Layout>
-      <section className="bg-gray-50 dark:bg-gray-900">
+      <section className="bg-gray-50 dark:bg-gray-900 overflow-y-auto">
         <div className="h-[80vh] grid grid-cols-3 w-[1152px] gap-4 mx-auto items-center">
           <div className="mb-6">
             <label
@@ -58,7 +129,8 @@ const Update = () => {
             <input
               type="text"
               id="default-input"
-              value={user.name}
+              value={uName}
+              onChange={(e)=>setUname(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
@@ -72,7 +144,8 @@ const Update = () => {
             <input
               type="text"
               id="default-input"
-              value={user.profession}
+              value={uProfession}
+              onChange={(e)=>setUprofession(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
@@ -86,7 +159,8 @@ const Update = () => {
             <input
               type="text"
               id="default-input"
-              value={user.phone}
+              value={uPhone}
+              onChange={(e)=>setUphone(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
@@ -100,7 +174,8 @@ const Update = () => {
             <input
               type="email"
               id="default-input"
-              value={user.email}
+              value={uEmail}
+              onChange={(e)=>setUemail(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
@@ -116,7 +191,8 @@ const Update = () => {
               cols={3}
               rows={3}
               id="default-input"
-              value={user.about}
+              value={uAbout}
+              onChange={(e)=>setUabout(e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
@@ -134,6 +210,7 @@ const Update = () => {
               <input
                 id="dropzone-file"
                 type="file"
+                accept=".png, .jpg, .jpeg"
                 onChange={handleImageChange}
                 className="hidden"
               />
@@ -155,7 +232,15 @@ const Update = () => {
                   id="file_input"
                   type="file"
                   accept=".pdf, .docx"
+                  onChange={handleResumeChange}
                 />
+                {uResume && (
+        <div>
+          <a href={uResume} target="_blank" rel="noopener noreferrer">
+            View Resume
+          </a>
+        </div>
+      )}
                 <p
                   className="mt-1 text-sm text-gray-500 dark:text-gray-300"
                   id="file_input_help"
@@ -167,7 +252,7 @@ const Update = () => {
           </div>
           <div className="mb-6">
           <div>
-      <form onSubmit={handleSkillSubmit}>
+      <form>
         <label htmlFor="skillsInput">Enter your skills (separated by commas):</label>
         <input
           type="text"
@@ -176,7 +261,6 @@ const Update = () => {
           onChange={handleSkillsChange}
           placeholder="e.g., JavaScript, React, Node.js"
         />
-        <button type="submit">Submit</button>
       </form>
     </div>
           </div>
@@ -185,29 +269,63 @@ const Update = () => {
               htmlFor="default-input"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Phone
+              Social Links:
             </label>
+            {uSocial.map((item, index)=>{
+              return (<div className="flex gap-2 mb-2"><input
+              type="text"
+              id="default-input"
+              value={item.name}
+              onChange={(e) =>handleSocialChange(index, 'name', e.target.value)}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
             <input
               type="text"
               id="default-input"
-              value={user.phone}
+              value={item.link}
+              onChange={(e) =>handleSocialChange(index, 'link', e.target.value)}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+            </div>)
+            })}
           </div>
-          <div className="mb-6">
+          <div className="mb-6 col-span-3">
             <label
               htmlFor="default-input"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Phone
+              Experince
             </label>
+            {uExperience.map((item, index)=>{
+              return(
+                <div className="flex gap-2 mb-4">
+                  <input
+              type="text"
+              id="default-input"
+              value={item.title}
+              onChange={(e) =>handleExperienceChange(index, 'title', e.target.value)}
+              className="bg-gray-50 border w-[19%] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
             <input
               type="text"
               id="default-input"
-              value={user.phone}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              value={item.companyName}
+              onChange={(e) =>handleExperienceChange(index, 'companyName', e.target.value)}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[19%] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+            <input
+              type="text"
+              id="default-input"
+              value={item.time}
+              onChange={(e) =>handleExperienceChange(index, 'time', e.target.value)}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[19%] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            <textarea type="text" value={item.desc} onChange={(e) =>handleExperienceChange(index, 'desc', e.target.value)} className="w-[40%]"/>
+                </div>
+              )
+            })}
           </div>
+        <button type="button" onClick={handleSubmit} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 col-span-3 mx-auto">Update</button>
         </div>
       </section>
     </Layout>

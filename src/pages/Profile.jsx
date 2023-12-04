@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
 import { Link } from "react-router-dom";
-import { userData } from "../../data";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [showContact, setShowContact] = useState(false);
-  const user = userData[0];
+  const user = useSelector(state => state.userData.data[0])
   return (
     <Layout>
       <div className="bg-gray-100 h-[80vh]">
@@ -58,7 +58,7 @@ const Profile = () => {
                     {user.skills.map((skill) => {
                       return (
                         <div className="flex justify-between">
-                          <li className="mb-2">{skill.name}</li>
+                          <li className="mb-2">{skill}</li>
                         </div>
                       );
                     })}
