@@ -13,6 +13,7 @@ const Header = () => {
     e.preventDefault();
     dispatch(logout());
     localStorage.removeItem("user");
+    localStorage.removeItem("userData");
     setUser(false);
     navigate("/");
   };

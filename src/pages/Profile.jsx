@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [showContact, setShowContact] = useState(false);
-  const user = useSelector(state => state.userData.data[0])
+  const [userData, setUserData] = useState(null);
+
+  // Fetch user data from local storage on component mount
+  useEffect(() => {
+    const storedUserData = JSON.parse(localStorage.getItem("userData"));
+    if (storedUserData) {
+      setUserData(storedUserData);
+    }
+  }, []); // Empty dependency array
+  
+
+  const user = useSelector((state) => state.userData.data[0]) || userData;
+
+  console.log(userData);
+
+  // Render loading or fallback UI if user data is not available
+  if (!user) {
+    return <p>Loading...</p>; // You can replace this with a loading spinner or other UI
+  }
   return (
     <Layout>
       <div className="bg-gray-100 h-[80vh]">
@@ -29,12 +47,15 @@ const Profile = () => {
                       Contact
                     </button>
                     <Link
-                      to={"/"}
+                      to={user.resume}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"
                     >
                       Resume
                     </Link>
-                    <Link to={"/edit"}
+                    <Link
+                      to={"/edit"}
                       className="bg-red-700 hover:bg-gray-400 text-white py-2 px-4 rounded"
                     >
                       Edit
@@ -55,9 +76,9 @@ const Profile = () => {
                     Skills
                   </span>
                   <ul>
-                    {user.skills.map((skill) => {
+                    {user.skills.map((skill, index) => {
                       return (
-                        <div className="flex justify-between">
+                        <div className="flex justify-between" key={index}>
                           <li className="mb-2">{skill}</li>
                         </div>
                       );
@@ -74,15 +95,15 @@ const Profile = () => {
                   Find me on
                 </h3>
                 <div className="flex justify-center items-center gap-6 my-6">
-                  {user.social.map((links) => {
-                    return <Link to={links.link}>{links.name}</Link>;
+                  {user.social.map((links, index) => {
+                    return <Link to={links.link} key={index}>{links.name}</Link>;
                   })}
                 </div>
                 <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
 
-                {user.experience.map((exp) => {
+                {user.experience.map((exp, index) => {
                   return (
-                    <div className="mb-6">
+                    <div className="mb-6" key={index}>
                       <div className="flex justify-between">
                         <span className="text-gray-600 font-bold">
                           {exp.title}
@@ -94,9 +115,7 @@ const Profile = () => {
                           <span className="text-gray-600">{exp.time}</span>
                         </p>
                       </div>
-                      <p className="mt-2">
-                        {exp.desc}
-                      </p>
+                      <p className="mt-2">{exp.desc}</p>
                     </div>
                   );
                 })}

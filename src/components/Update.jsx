@@ -105,8 +105,15 @@ const Update = () => {
 
     // Dispatch the updateUserData action
     dispatch(updateUserData({ id: user.id, updatedData }));
-    console.log(updatedData)
     message.success("User Data Updated")
+
+    // Update local storage
+    const updatedUserData = {
+      ...user,
+      ...updatedData,
+    };
+    localStorage.setItem("userData", JSON.stringify(updatedUserData));
+
     navigate("/")
     } catch (error) {
       console.log(error)
